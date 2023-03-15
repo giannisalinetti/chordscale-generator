@@ -22,6 +22,19 @@
 
 import random
 import textwrap
+import argparse
+
+parser = argparse.ArgumentParser(
+        prog = 'chordscale-generator',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description = '''
+Chords and Scales Generator.
+This tool helps musicians to create random sequence of chords and scales to practice them on the instrument.
+        '''
+        )
+mode_arg = parser.add_argument('-m', '--mode', help='Generation mode. Valid options: "chord", "scale"')
+length_arg = parser.add_argument('-l', '--length', type=int, help='Length of sequence. Valid options: positive INT')
+args = parser.parse_args()
 
 def tone_set(n):
     tone_list = []
@@ -56,7 +69,7 @@ def chord_set(n):
                "Maj6", 
                "Min6", 
                "7#5" ]
-    for c in range(0, int(prog_len)):
+    for c in range(0, int(args.length)):
         chord_list.append(random.choice(chords))
     return chord_list
 
@@ -81,55 +94,34 @@ def scale_set(n):
         scale_list.append(random.choice(scales))
     return scale_list
 
-def export_ptext(tn, spec, repeats):
-    name = input("Choose ouput file name, .txt will be appended: ")
-    file_name = name + ".txt"
-    out_file = open( file_name, "w")
-    out_file.write("ChordScaleGen v0.3\n\n")
-    for l in range(0, repeats):
-        out_file.write(tn[l] + " " + spec[l] + "\n")
-    out_file.close
+def print_separator():
+    width = 72
+    print('-' * width)
 
-width = 72
-dotted_line = '-' * width
-print(dotted_line)
-print("\033[1m" + "ChordScaleGen" + "\033[0m")
-print("\033[1m" + "Chords and scales generator, Version 0.3" + "\033[0m")
-msg = (
-    "This tool helps musicians to create random sequences "
-    "of chords and scale to practice on instruments. Choose "
-    "between chord or scale generation and the lenght of "
-    "iteration (how much long the sequence will be")
-print(textwrap.fill(msg, width=width))
-print(dotted_line)
+# Check arguments
+if args.mode != 'chord' and args.mode != 'scale':
+    raise argparse.ArgumentError(mode_arg, 'Mode cannot be different from "scale" or "chord"')
 
-mode = input("Generagete chords(c) or scales(s)? ")
-prog_len = input("Set number of iterations: ")
+if args.length <= 0:
+    raise argparse.ArgumentError(length_arg, 'Length must be a positive integer')
 
-if mode == "c" or mode == "C":
-    print("\033[1m" + "Printing chord chart..." + "\033[0m" + "\n")
-    print(dotted_line)
-    chord_out = chord_set(int(prog_len))
-    tone_out = tone_set(int(prog_len))
-    for i in range(0, int(prog_len)):
+# Print chord sequence in plain text
+if args.mode == 'chord':
+    print("\033[1m" + "Printing chord chart..." + "\033[0m")
+    print_separator()
+    chord_out = chord_set(int(args.length))
+    tone_out = tone_set(int(args.length))
+    for i in range(0, int(args.length)):
          print(tone_out[i], chord_out[i])
-    print(dotted_line)
-    txt_exp = input("\n" + "Export sequence to text file? Yes(y)/No(n) ")
-    if txt_exp == 'y' or txt_exp == 'Y':
-         export_ptext(tone_out, chord_out, int(prog_len))
+    print_separator()
 
-elif mode == "s" or mode == "S":
-    print("\033[1m" + "Printing scale chart..." + "\033[0m" + "\n")
-    print(dotted_line)
-    scale_out = scale_set(int(prog_len))
-    tone_out = tone_set(int(prog_len))
-    for i in range(0, int(prog_len)):
+# Print scale sequence in plain text
+if args.mode == 'scale':
+    print("\033[1m" + "Printing scale chart..." + "\033[0m")
+    print_separator()
+    scale_out = scale_set(int(args.length))
+    tone_out = tone_set(int(args.length))
+    for i in range(0, int(args.length)):
          print(tone_out[i], scale_out[i])
-    print(dotted_line)
-    txt_exp = input("\n" + "Export sequence to text file? Yes(y)/No(n) ")
-    if txt_exp == 'y' or txt_exp == 'Y':
-         export_ptext(tone_out, scale_out, int(prog_len))
+    print_separator()
 
-else:
-    print("Wrong choice. You must press \"c/C\" for chords or \"s/S\" for scales.")
-print("Goodbye.")
