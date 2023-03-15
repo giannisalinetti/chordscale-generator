@@ -23,23 +23,60 @@
 import random
 import textwrap
 
-def tone_prog(n):
+def tone_set(n):
     tone_list = []
-    tones = ["C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb", "B"]
+    tones = ["C", "C#", "Db", "D", "D#", "Eb", "E", "F", "F#", "Gb", "G", "G#", "Ab", "A", "A#", "Bb", "B"]
     for t in range(0, n):
         tone_list.append(random.choice(tones))
     return tone_list
 
-def chord_prog(n):
+def chord_set(n):
     chord_list = []
-    chords = [ "Major", "Minor", "Diminished", "Augmented", "Maj7", "Min7", "Min/Maj7", "7", "7sus4", "Min7b5", "Dim7", "7alt", "7b9", "Maj7#5", "7#11", "7b5", "7sus4b2", "Maj6", "Min6", "7b9#9", "7#5" ]
+    chords = [ "Major", 
+               "Minor", 
+               "Diminished", 
+               "Augmented", 
+               "Maj7", 
+               "Min7", 
+               "Min/Maj7", 
+               "7", 
+               "7sus4", 
+               "Min7b5", 
+               "Dim7", 
+               "7alt", 
+               "7b9", 
+               "7b9#9", 
+               "Maj7#5", 
+               "7#11", 
+               "7b5", 
+               "7sus4b2", 
+               "7b13", 
+               "7b9b13", 
+               "13", 
+               "Maj6", 
+               "Min6", 
+               "7#5" ]
     for c in range(0, int(prog_len)):
         chord_list.append(random.choice(chords))
     return chord_list
 
-def scale_prog(n):
+def scale_set(n):
     scale_list = []
-    scales = [ "Major", "Natural Minor", "Melodic Minor", "Harmonic Minor", "Harmonic Major", "Whole Tone", "Half-Whole"]
+    scales = [ "Major", 
+               "Natural Minor", 
+               "Melodic Minor", 
+               "Harmonic Minor", 
+               "Harmonic Major", 
+               "Whole Tone", 
+               "Half-Whole Dimished",
+               "Whole-Half Dimished",
+               "Dorian",
+               "Frigian",
+               "Lydian",
+               "Mixolydian",
+               "Aelian",
+               "Locrian",
+               "SuperLocrian"]
     for s in range(0, n):
         scale_list.append(random.choice(scales))
     return scale_list
@@ -72,8 +109,8 @@ prog_len = input("Set number of iterations: ")
 if mode == "c" or mode == "C":
     print("\033[1m" + "Printing chord chart..." + "\033[0m" + "\n")
     print(dotted_line)
-    chord_out = chord_prog(int(prog_len))
-    tone_out = tone_prog(int(prog_len))
+    chord_out = chord_set(int(prog_len))
+    tone_out = tone_set(int(prog_len))
     for i in range(0, int(prog_len)):
          print(tone_out[i], chord_out[i])
     print(dotted_line)
@@ -84,8 +121,8 @@ if mode == "c" or mode == "C":
 elif mode == "s" or mode == "S":
     print("\033[1m" + "Printing scale chart..." + "\033[0m" + "\n")
     print(dotted_line)
-    scale_out = scale_prog(int(prog_len))
-    tone_out = tone_prog(int(prog_len))
+    scale_out = scale_set(int(prog_len))
+    tone_out = tone_set(int(prog_len))
     for i in range(0, int(prog_len)):
          print(tone_out[i], scale_out[i])
     print(dotted_line)
